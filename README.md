@@ -11,7 +11,9 @@ React를 기반으로 개발하며 **한 번이라도 떠올렸었던 질문들*
    - [render](#render)
    - [재조정 (reconciliation)](<#재조정-(reconciliation)>)
    - [가상 DOM (virtual DOM)](<#가상-DOM-(virtual-DOM)>)
-2. [Hook](#Hook)
+2. [주요 개념](#주요-개념)
+   - [JSX](#JSX)
+3. [Hook](#Hook)
    - [useState](#useState)
    - [useEffect](#useEffect)
    - [useReducer](#useReducer)
@@ -152,6 +154,37 @@ React를 기반으로 개발하며 **한 번이라도 떠올렸었던 질문들*
 - 잦은 DOM 조작이 발생한다면 효율적
 - 그렇지 않다면 직접 DOM을 조작하는 것이 효율적일 수 있음
   - Virtual DOM을 사용하면 각 요소를 모두 비교해야 하는 오버헤드가 있기 때문
+
+## 주요 개념
+
+### JSX
+
+[목차로 이동하기](#Index)
+
+#### ⚪️ JSX란?
+
+- 자바스크립트를 확장한 문법 (그러나 ECMAScript 표준의 일부는 아님)
+  - 자바스크립트의 표준이 아니기 때문에 바로 실행하면 실행되지 않고 에러가 발생함
+- 자바스크립트 내부에서 표현하기 까다로웠던 XML 스타일의 트리 구문을 작성하는 데에 도움을 주는 새로운 문법
+
+#### ⚪️ JSX를 사용하는 이유 (역할)
+
+- 다양한 트랜스파일러에서 다양한 속성을 가진 트리 구조를 토큰화해 ECMAScript로 변환하기 위한 목적
+
+#### ⚪️ JSX 어트리뷰트에 카멜케이스(camelCase) 네이밍을 사용하는 이유
+
+- JSX는 HTML보다 자바스크립트에 가깝기 때문에 React DOM은 HTML 어트리뷰트 이름 대신 카멜케이스 프로퍼티 네이밍 규칙을 사용함
+- class → className, tabindex → tabIndex
+
+#### ⚪️ JSX → Javascript
+
+- JSX는 자바스크립트 표준이 아니기 때문에 트랜스파일러를 거쳐야 됨 (feat. babel)
+
+#### ⚪️ 리액트를 사용할 때 JSX는 필수인가?
+
+- 아님
+- JSX는 React.createElement를 호출하기 위한 문법적 설탕임
+- 즉, JSX로 할 수 있는 모든 것은 순수 자바스크립트로도 가능함
 
 ## Hook
 
