@@ -22,6 +22,11 @@ React를 기반으로 개발하며 **한 번이라도 떠올렸었던 질문들*
    - [useRef](#useRef)
    - [useContext](#useContext)
    - [useLayoutEffect](#useLayoutEffect)
+4. [React 18](#React-18)
+   - [자동 배치 (Automatic Batching)](<#자동-배치-(Automatic-Batching)>)
+   - [동시성 (Concurrent Feature)](<#동시성-(Concurrent-Feature)>)
+   - [useTransition](#useTransition)
+   - [useDeferredValue](#useDeferredValue)
 
 ## 원리
 
@@ -487,3 +492,78 @@ React를 기반으로 개발하며 **한 번이라도 떠올렸었던 질문들*
 
 - useLayoutEffect 내부의 코드는 브라우저의 리페인팅을 블로킹함
 - 따라서 과도하게 사용할 경우 app을 느리게 하는 원인이 되기 때문에 가능하다면 useEffect를 사용하는 것이 좋음
+
+## React 18
+
+### 자동 배치
+
+[목차로 이동하기](#Index)
+
+#### ⚪️ Before 18
+
+- 하나의 핸들러 내부의 여러 개의 상태 업데이트를 하나의 리렌더링으로 처리했음
+- 그러나 비동기 함수의 경우 여러 개의 상태 업데이트 각각을 리렌더링으로 처리함
+
+#### ⚪️ After 18
+
+- 비동기 함수의 여러 개의 상태 업데이트도 하나의 리렌더링으로 처리함 (배치)
+
+### 동시성 (Concurrent Feature)
+
+[목차로 이동하기](#Index)
+
+#### ⚪️ 동시성 개념
+
+- 동시에 여러 버전의 UI를 리액트가 준비할 수 있도록 하는 메커니즘
+
+#### ⚪️ Suspense란
+
+- 데이터가 준비되기 전 사용자에게 보여주고 싶은 컴포넌트를 먼저 렌더링하는 기능
+
+#### ⚪️ Transition이란
+
+- 리액트로 하여금 긴급한 업데이트와 긴급하지 않은 업데이트를 구별하도록 하는 개념
+- `Urgent updates`: 타이핑, 클릭과 같이 사용자 인터렉션에 대한 즉각적인 반영
+- `Transition updates`: 하나의 뷰에서 다른 뷰로 UI를 전환하는 것
+
+### useTransition
+
+[목차로 이동하기](#Index)
+
+#### ⚪️ useTransition의 정의
+
+- UI를 차단하지 않고 상태를 업데이트할 수 있는 훅
+
+#### ⚪️ useTransition이 반환하는 것
+
+- `isPending`: transition이 pending 상태임을 알려주는 플래그
+- `startTransition`: 상태 업데이트를 transition으로 표시할 수 있는 함수
+
+#### ⚪️ useTransition의 용도
+
+- 즉각적으로 UI를 업데이트하고 싶은 상태 업데이트가 있을 때 사용
+- startTransition으로 래핑한 상태 업데이트가 트리거되면 기존에 진행되던 렌더링을 버림
+
+#### ⚪️ startTransition 사용법
+
+- setState를 호출하는 함수(scope라 칭함)를 인수로 전달
+- 리액트는 scope를 호출하고 동기적으로 예정된 모든 상태 업데이트를 transition으로 표시
+  - 이는 차단되지 않고 로딩을 표시하지 않음
+- 예를 들어 유저가 탭을 클릭하고 이어서 바로 다른 탭을 클릭했을 때 처음 탭을 클릭한 상태의 UI를 표시하기까지 기다리지 않고 바로 다른 탭을 클릭한 UI를 그림 (클릭한 탭 상태 업데이트를 startTransition으로 래핑한 경우)
+
+#### ⚪️ isPending 용도
+
+- Transition 중이라는 시각적인 상태를 표현하고자 할 때 사용
+
+### useDeferredValue
+
+[목차로 이동하기](#Index)
+
+#### ⚪️ useDeferredValue의 정의
+
+- UI의 일부 업데이트를 연기할 수 있는 훅
+
+#### ⚪️ useDeferredValue가 반환하는 것
+
+- 첫 렌더링이라면 훅 호출 시 전달한 값과 동일한 값을 리턴
+- 업데이트 하는 동안에는 먼저 이전 값으로 리렌더링을 하고(이전 값 리턴), 새로운 값으로 백그라운드에서 또 다른 리렌더를 시도함(업데이트된 값 리턴)
